@@ -3,11 +3,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 from imageio import imread
 import cv2
+import shutil
+from sklearn.model_selection import train_test_split
+import seaborn as sns
 
 TRAINING_DIR = "D:/Madiha Mariam Ahmed/Image Forgery Detection/phase-01-training/dataset-dist/phase-01/training/"
 PRISTINE_DIR = TRAINING_DIR + 'pristine/'
 FAKE_DIR = TRAINING_DIR + 'fake/'
-MASKS_DIR = TRAINING_DIR + 'masks/'
+fakes = os.listdir(FAKE_DIR)
+pristines = os.listdir(PRISTINE_DIR)
+labels = [0]*1050 + [1]*450
+image_names = pristines
+image_names = image_names.append(fakes)
 
 def get_stats(folder_name):
     imgage_names = os.listdir(os.path.join(TRAINING_DIR,folder_name))
@@ -17,7 +24,7 @@ def get_stats(folder_name):
     three_channel = []
     four_channel = []
 
-    for ip, img_path in enumerate(imgs_full_path):
+    for ipidx, img_path in enumerate(imgs_full_path):
         img = imread(img_path)
 
         if len(img.shape) == 2:
@@ -29,52 +36,20 @@ def get_stats(folder_name):
 
     return one_channel, three_channel, four_channel
 
+def data_split():
+    fakes = list(os.listdir(FAKE_DIR)[1:])
+    pristines = list(os.listdir(PRISTINE_DIR))
+    image_names = pristines + fakes
+    labels = [0]*450 + [1]*1050
+    x_train, x_test, y_train, y_test = train_test_split(image_names, labels, test_size=0.2, random_state=0)
+
+
+
 if __name__ == "__main__":
+    data_split()
     one_channel, three_channel, four_channel = get_stats(FAKE_DIR)
     print("one_channel, three_channel, four_channel")
     print(len(one_channel), len(three_channel), len(four_channel))
-
-import shutil
-import glob
-import pandas as pd
-from sklearn.model_selection import train_test_split
-import sys
-
-fakes = os.listdir(FAKE_DIR)
-pristines = os.listdir(PRISTINE_DIR)
-masks = os.listdir(MASKS_DIR)
-
-def get_final(folder_name):
-    imgage_names = os.listdir(os.path.join(TRAINING_DIR, folder_name))
-    imgs_full_path = [os.path.join(TRAINING_DIR, "{}/{}".format(folder_name, i)) for i in imgage_names]
-    pristines_final = []
-    fakes_final = []
-    masks_final = []
-    img_p = [cv2.imread(file) for file in glob.glob(PRISTINE_DIR + "*.png")]
-    img_f = [cv2.imread(file) for file in glob.glob(FAKE_DIR + "*.png")]
-    img_m = [cv2.imread(file) for file in glob.glob(MASKS_DIR + "*.png")]
-
-    for img in img_p, img_m, img_f:
-        if img.shape[2]==4 in img_p:
-            pristines_final.append(img)
-            return len(pristines_final)
-        elif img.shape[2]==3 or img.shape[2]==4 in img_f:
-            fakes_final.append(img)
-            return len(fakes_final)
-        elif img.shape[2]==3 or img.shape[2]==4 in img_m:
-            masks_final.append(img)
-            return len(masks_final)
-get_final(PRISTINE_DIR)
-
-
-
-
-
-
-
-
-
-
 
 
 
