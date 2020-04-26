@@ -7,7 +7,7 @@ import shutil
 from sklearn.model_selection import train_test_split
 import seaborn as sns
 
-TRAINING_DIR = "D:/Madiha Mariam Ahmed/Image Forgery Detection/phase-01-training/dataset-dist/phase-01/training/"
+TRAINING_DIR = "dataset-dist/phase-01/training/"
 PRISTINE_DIR = TRAINING_DIR + 'pristine/'
 FAKE_DIR = TRAINING_DIR + 'fake/'
 fakes = os.listdir(FAKE_DIR)
