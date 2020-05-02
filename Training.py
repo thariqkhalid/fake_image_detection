@@ -1,12 +1,9 @@
 from data_loader import load_split_train_test
-import CNN
 import torch.nn as nn
 import torch.optim as optim
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr = 0.001, momentum=0.9)
-trainloader, testloader = load_split_train_test(DATA_DIR, .2)
 import torch.nn.functional as F
 
+DATA_DIR = "dataset-dist/phase-01/training/"
 
 class Net(nn.Module):
     def __init__(self):
@@ -28,10 +25,7 @@ class Net(nn.Module):
         return x
 
 
-net = Net()
-
 def train_cnn(train_data):
-    DATA_DIR = "D:/Madiha Mariam Ahmed/Image Forgery Detection/phase-01-training/dataset-dist/phase-01/training/"
     trainloader, testloader = load_split_train_test(DATA_DIR, .2)
     for epoch in range(2):
         running_loss = 0.0
@@ -50,8 +44,13 @@ def train_cnn(train_data):
 
 
     print('Finished Training')
-    PATH = 'D:/Madiha Mariam Ahmed/Image Forgery Detection/'
+    PATH = './'
     torch.save(net.state_dict(), PATH)
 
 if __name__ == '__main__':
+    net = Net()
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+    trainloader, testloader = load_split_train_test(DATA_DIR, .2)
+
     train_results = train_cnn(trainloader)
