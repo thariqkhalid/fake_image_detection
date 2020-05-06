@@ -1,5 +1,6 @@
 import torch
 from torch.utils.data.dataset import Dataset
+
 from torchvision import datasets, transforms, models
 from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
@@ -26,11 +27,27 @@ class FakeImagesDataset(Dataset):
 
 
 def load_split_train_test(data_dir, valid_size = 0.2):
+    mean_list = []
+    std_list = []
+    for i, data in enumerate(dataloader, 0):
+        numpy_img = data[0].numpy()
+        batch_mean = np.mean(numpy_img, axis=(0, 2, 3))
+        batch_std = np.std(numpy_img, axis=(0, 2, 3))
+        mean_list.append(batch_mean)
+        std_list.append(batch_std)
+    mean_list = np.array(mean_list)
+    std_list = np.array(std_list)
+    # print(mean_list.shape, std_list.shape)
+    mean_list = mean_list.mean()
+    std_list = std_list.mean()
+    # print(mean_list, std_list)
     train_transforms = transforms.Compose([transforms.Resize(224),
-                                           transforms.ToTensor()])
+                                           transforms.ToTensor(),
+                                           transforms.Normalize(mean_list,std_list)])
     test_transforms = transforms.Compose([transforms.Resize(224),
-                                           transforms.ToTensor()])
-    # train_transforms = transforms.Normalize()
+                                           transforms.ToTensor(),
+                                          transforms.Normalize(mean_list, std_list)])
+
 
 
     train_data =  datasets.ImageFolder(data_dir, transform=train_transforms)
@@ -51,27 +68,12 @@ def load_split_train_test(data_dir, valid_size = 0.2):
 
 
 
-def Normalize_imgs(dataloader):
-    mean_list = []
-    std_list = []
-    for i, data in enumerate(trainloader+testloader, 0):
-        numpy_img = data[0].numpy()
-        batch_mean = np.mean(numpy_img, axis = (0,2,3))
-        batch_std = np.std(numpy_img, axis = (0,2,3))
-        mean_list.append(batch_mean)
-        std_list.append(batch_std)
-        mean_list = np.array(mean_list)
-        std_list = np.array(std_list)
-        print(mean_list.shape, std_list.shape)
-        mean_list = mean_list.mean()
-        std_list = std_list.mean()
-        print(mean_list, std_list)
+
 
 if __name__ == '__main__':
     trainloader, testloader = load_split_train_test(DATA_DIR, .2)
     print(trainloader.dataset.classes)
-    Normalized_train = Normalize_imgs(trainloader)
-    Normalize_test = Normalize_imgs(testloader)
+
 
 
 
