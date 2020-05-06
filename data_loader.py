@@ -6,7 +6,7 @@ import numpy as np
 
 # THERE ARE MULTIPLE WAYS TO HAVE CUSTOM DATA LOADERS. WE'LL EXPLORE BOTH AND SEE WHICH IS GOOD FOR US
 
-DATA_DIR = "dataset-dist/phase-01/training/"
+DATA_DIR = "D:/Madiha Mariam Ahmed/Image Forgery Detection/phase-01-training/dataset-dist/phase-01/training/"
 
 '''
 class FakeImagesDataset(Dataset):
@@ -30,6 +30,13 @@ def load_split_train_test(data_dir, valid_size = 0.2):
                                            transforms.ToTensor()])
     test_transforms = transforms.Compose([transforms.Resize(224),
                                            transforms.ToTensor()])
+    def show (i):
+        for i in train_transforms+test_transforms:
+            i = i.reshape((224, 224, 3))
+            m, M = i.min(), i.max()
+            plt.imshow((i - m) / (M - m))
+            plt.show()
+    
     train_data =  datasets.ImageFolder(data_dir, transform=train_transforms)
     test_data = datasets.ImageFolder(data_dir, transform=test_transforms)
 
