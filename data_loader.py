@@ -29,12 +29,35 @@ class FakeImagesDataset(Dataset):
 def load_split_train_test(data_dir, valid_size = 0.2):
     mean_list_train = []
     std_list_train = []
-    for i, data in enumerate(trainloader, 0):
+
+    #first let's create a dataloader with which we can calculate the mean and standard deviation for the whole data
+    data_transforms = transforms.Compose([transforms.Resize(224),
+                                           transforms.ToTensor()])
+    full_data = datasets.ImageFolder(data_dir, transform=data_transforms)
+
+    dataloader = torch.utils.data.DataLoader(full_data,
+                                              sampler=train_sampler, batch_size=4)
+    mean_list = []
+    std_list = []
+    for i, data in enumerate(dataloader, 0):
+        numpy_img = data[0].numpy()
+        batch_mean = np.mean(numpy_img, axis=(0, 2, 3))
+        batch_std = np.std(numpy_img, axis=(0, 2, 3))
+        mean_list.append(batch_mean)
+        std_list.append(batch_std)
+
+    mean_list = np.array(mean_list).mean()
+    std_list = np.array(std_list).mean()
+
+
+    # the below code is being commented for your study of the above code
+    '''for i, data in enumerate(trainloader, 0):
         numpy_img_train = data[0].numpy()
         batch_mean_train = np.mean(numpy_img, axis=(0, 2, 3))
         batch_std_train = np.std(numpy_img, axis=(0, 2, 3))
         mean_list_train.append(batch_mean_train)
         std_list_train.append(batch_std_train)
+
     mean_list_train = np.array(mean_list_train)
     std_list_train = np.array(std_list_train)
     # print(mean_list_train.shape, std_list_train.shape)
@@ -50,19 +73,20 @@ def load_split_train_test(data_dir, valid_size = 0.2):
         batch_std_test = np.std(numpy_img_test, axis=(0, 2, 3))
         mean_list_test.append(batch_mean_test)
         std_list_test.append(batch_std_test)
+
     mean_list_test = np.array(mean_list_test)
     std_list_test = np.array(std_list_test)
     # print(mean_list_test.shape, std_list_test.shape)
     mean_list_test = mean_list_test.mean()
     std_list_test = std_list_test.mean()
-    # print(mean_list_test, std_list_test)
+    # print(mean_list_test, std_list_test)'''
 
     train_transforms = transforms.Compose([transforms.Resize(224),
                                            transforms.ToTensor(),
-                                           transforms.Normalize(mean_list_train,std_list_train)])
+                                           transforms.Normalize(mean_list,std_list)])
     test_transforms = transforms.Compose([transforms.Resize(224),
                                            transforms.ToTensor(),
-                                          transforms.Normalize(mean_list_test, std_list_test)])
+                                          transforms.Normalize(mean_list,std_list)])
 
 
 
