@@ -33,7 +33,7 @@ class ConvNet(nn.Module):
             nn.BatchNorm2d(hid2_size),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2))
-        self.fc = nn.Linear(214,out_size # Unsure
+        self.fc = nn.Linear(214,out_size) # Unsure
 
     def forward(self, x):
         out = self.layer1(x)
