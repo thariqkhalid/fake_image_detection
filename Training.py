@@ -69,14 +69,6 @@ class ConvNet(nn.Module):
         print(out.shape)
         return out # 'out' will give the size of the resulting feature map. Sir, can you please run it and check?
 
-
-
-
-
-
-
-
-
 def train_cnn(train_data):
 
     trainloader, testloader = load_split_train_test(DATA_DIR, .2)
@@ -91,7 +83,7 @@ def train_cnn(train_data):
 
             optimizer.zero_grad() # Backprop
 
-            outputs = net(inputs)
+            outputs = ConvNet(inputs)
 
             loss = criterion(outputs, labels)
 
