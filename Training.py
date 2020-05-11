@@ -5,11 +5,7 @@ import torch.nn as nn
 import torch.optim as optim
 
 import torch.nn.functional as F
-in_size = 3
-hid1_size = 16
-hid2_size = 32
-out_size = 2
-k_conv_size = 5
+
 
 
 
@@ -23,17 +19,35 @@ class ConvNet(nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
         self.layer1 = nn.Sequential(
-            nn.Conv2d(in_size, hid1_size, k_conv_size),
-            nn.BatchNorm2d(hid1_size), # Used to improve speed, performance and stability of NN
+            nn.Conv2d(3, 6, 5),
+            #nn.BatchNorm2d(16), # Used to improve speed, performance and stability of NN. Also, is BatchNorm2d() important?
             nn.ReLU()
             nn.MaxPool2d(kernel_size=2))
 
         self.layer2 = nn.Sequential(
-            nn.Conv2d(hid1_size, hid2_size, k_conv_size),
-            nn.BatchNorm2d(hid2_size),
+            nn.Conv2d(6, 16, 5),
+            #nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2))
-        self.fc = nn.Linear(214,out_size) # Unsure
+
+        self.layer3 = nn.Sequential(
+            nn.Conv2d(16, 32, 5),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2))
+
+        self.layer4 = nn.Sequential(
+            nn.Conv2d(32,64, 5),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2))
+
+        self.layer5 = nn.Sequential(
+            nn.Conv2d(64, 128, 5),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2))
+
+
+
+        self.fc = nn.Linear( 3.125, 2)
 
     def forward(self, x):
         out = self.layer1(x)
@@ -42,9 +56,18 @@ class ConvNet(nn.Module):
         out = self.layer2(out)
         print(out.shape)
 
+        out = self.layer3(out)
+        print(out.shape)
+
+        out = self.layer4(out)
+        print(out.shape)
+
+        out = self.layer5(out)
+        print(out.shape)
+
         out = out.reshape(out.size (0), -1) # Flatten
         print(out.shape)
-        return out # 'out' will give the size of the resulting feature map. Sir, can you please run it and check whether it is 214 pixels?
+        return out # 'out' will give the size of the resulting feature map. Sir, can you please run it and check?
 
 
 
