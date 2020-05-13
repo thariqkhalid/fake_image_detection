@@ -12,37 +12,38 @@ class ConvNet(nn.Module):
         super(ConvNet, self).__init__()
         self.layer1 = nn.Sequential(
             nn.Conv2d(3, 6, 5),
-            nn.BatchNorm2d(16), # Used to improve speed, performance and stability of NN. Also, is BatchNorm2d() important?
+            nn.BatchNorm2d(6), # Used to improve speed, performance and stability of NN.
             nn.ReLU()
             nn.MaxPool2d(kernel_size=2))
 
         self.layer2 = nn.Sequential(
             nn.Conv2d(6, 16, 5),
-            nn.BatchNorm2d(32),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2))
 
         self.layer3 = nn.Sequential(
             nn.Conv2d(16, 32, 5),
-            nn.BatchNorm2d(64),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2))
 
         self.layer4 = nn.Sequential(
             nn.Conv2d(32,64, 5),
-            nn.BatchNorm2d(128)
+            nn.BatchNorm2d(64)
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2))
 
         self.layer5 = nn.Sequential(
             nn.Conv2d(64, 128, 5),
-            nn.BatchNorm2d(256),
+            nn.BatchNorm2d(128),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2))
 
-
-
-        self.fc = nn.Linear( 3.125, 2)
+        self.fc = nn.Sequential(
+            nn.Linear(128*5*5, 2),
+            nn.ReLU(),
+            nn.Dropout(0.5))  #Dropout: Used in training mode, mitigates overfitting
 
     def forward(self, x):
         out = self.layer1(x)
@@ -110,7 +111,7 @@ def test_cnn(test_data):
         predcited = torch.max(outputs.data, 1)
         # testloader[labels] = testloader[lables].numpy()  #How to access the lables of the test data?
         print('Accuracy:', accuracy_score((predcited, testloader[lables])))
-        print('Precision:', precision_score(predcited, testsloader[labels], average='weighted'))
+        print('Precision:', precision_score(predcited, testloader[labels], average='weighted'))
         print('Recall:', recall_score(predcited, testloader[labels], average = 'weighted'))
 
 
