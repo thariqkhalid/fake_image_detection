@@ -86,7 +86,7 @@ def train_cnn(traindata): # Increase no. of epochs for better accuracy
                       (epoch + 1, i + 1, running_loss / 2000))
                 running_loss = 0.0
     print('Finished Training')
-    PATH = './'
+    PATH = 'D:/Madiha Mariam Ahmed/Image Forgery Detection/Fake News Detection/'
     torch.save(net.state_dict(), PATH)
 
 
