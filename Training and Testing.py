@@ -106,8 +106,6 @@ def test_cnn(test_data):
     from sklearn.metrics import accuracy_score, precision_score, recall_score
     # Feeding the test data into our model:
     with torch.no_grad():
-        correct = 0
-        total = 0
         outputs = model(testloader)
         predcited = torch.max(outputs.data, 1)
         # testloader[labels] = testloader[lables].numpy()  #How to access the lables of the test data?
