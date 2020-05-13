@@ -109,7 +109,7 @@ def test_cnn(test_data):
         correct = 0
         total = 0
         outputs = model(testloader)
-        _, predcited = torch.max(outputs.data, 1)
+        predcited = torch.max(outputs.data, 1)
         # testloader[labels] = testloader[lables].numpy()  #How to access the lables of the test data?
         print('Accuracy:', accuracy_score((predcited, testloader[lables])))
         print('Precision:', precision_score(predcited, testsloader[labels], average='weighted'))
