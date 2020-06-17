@@ -6,7 +6,7 @@ import numpy as np
 
 # THERE ARE MULTIPLE WAYS TO HAVE CUSTOM DATA LOADERS. WE'LL EXPLORE BOTH AND SEE WHICH IS GOOD FOR US
 
-DATA_DIR = "D:/Madiha Mariam Ahmed/Image Forgery Detection/phase-01-training/dataset-dist/phase-01/training/"
+DATA_DIR = 'D:/Fake News Detector/Training Data/'
 '''
 class FakeImagesDataset(Dataset):
     def __init__(self):
@@ -26,20 +26,20 @@ def load_split_train_test(data_dir, valid_size=0.2):
     # first let's create a dataloader with which we can calculate the mean and standard deviation for the whole data
     data_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor()])
     full_data = datasets.ImageFolder(DATA_DIR, transform=data_transforms)
-    data_sampler = SubsetRandomSampler(full_data)
-    dataloader = torch.utils.data.DataLoader(full_data, sampler=data_sampler, batch_size=4)
-    mean_list = []
-    std_list = []
-    for i, data in enumerate(dataloader, 0):
-        numpy_img = data[0].numpy()
-        batch_mean = np.mean(numpy_img, axis=(0, 2, 3))
-        batch_std = np.std(numpy_img, axis=(0, 2, 3))
-        mean_list.append(batch_mean)
-        std_list.append(batch_std)
-    mean_list = np.array(mean_list).mean()
-    std_list = np.array(std_list).mean()
-    train_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor(), transforms.Normalize(mean_list, std_list)])
-    test_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor(), transforms.Normalize(mean_list, std_list)])
+    #data_sampler = SubsetRandomSampler(full_data)
+    dataloader = torch.utils.data.DataLoader(full_data, batch_size=4)
+    # mean_list = []
+    # std_list = []
+    # for i, data in enumerate(dataloader, 0):
+    #     numpy_img = data[0].numpy()
+    #     batch_mean = np.mean(numpy_img, axis=(0, 2, 3))
+    #     batch_std = np.std(numpy_img, axis=(0, 2, 3))
+    #     mean_list.append(batch_mean)
+    #     std_list.append(batch_std)
+    # mean_list = np.array(mean_list).mean()
+    # std_list = np.array(std_list).mean()
+    train_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor()) # transforms.Normalize(mean_list, std_list)
+    test_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor()) #transforms.Normalize(mean_list, std_list)
     train_data = datasets.ImageFolder(DATA_DIR, transform=train_transforms)
     test_data = datasets.ImageFolder(DATA_DIR, transform=test_transforms)
 
