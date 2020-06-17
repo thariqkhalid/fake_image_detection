@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data.dataset import Dataset
 from torchvision import datasets, transforms, models
-from torch.utils.data.sampler import SubsetRandomSampler
+from torch.utils.data.sampler import SubsetRandomSampler, RandomSampler
 import numpy as np
 
 # THERE ARE MULTIPLE WAYS TO HAVE CUSTOM DATA LOADERS. WE'LL EXPLORE BOTH AND SEE WHICH IS GOOD FOR US
@@ -26,7 +26,7 @@ def load_split_train_test(data_dir, valid_size=0.2):
     # first let's create a dataloader with which we can calculate the mean and standard deviation for the whole data
     data_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor()])
     full_data = datasets.ImageFolder(DATA_DIR, transform=data_transforms)
-    #data_sampler = SubsetRandomSampler(full_data)
+    #data_sampler = RandomSampler(full_data)
     dataloader = torch.utils.data.DataLoader(full_data, batch_size=4)
     # mean_list = []
     # std_list = []
