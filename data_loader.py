@@ -38,8 +38,8 @@ def load_split_train_test(data_dir, valid_size=0.2):
     #     std_list.append(batch_std)
     # mean_list = np.array(mean_list).mean()
     # std_list = np.array(std_list).mean()
-    train_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor()) # transforms.Normalize(mean_list, std_list)
-    test_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor()) #transforms.Normalize(mean_list, std_list)
+    train_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor()]) # transforms.Normalize(mean_list, std_list)
+    test_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor()]) #transforms.Normalize(mean_list, std_list)
     train_data = datasets.ImageFolder(DATA_DIR, transform=train_transforms)
     test_data = datasets.ImageFolder(DATA_DIR, transform=test_transforms)
 
