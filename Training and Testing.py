@@ -5,7 +5,7 @@ import torchvision
 import torch.optim as optim
 import torch.nn.functional as F
 
-DATA_DIR = "D:/Madiha Mariam Ahmed/Image Forgery Detection/phase-01-training/dataset-dist/phase-01/training/"
+DATA_DIR = 'D:/Fake News Detector/Training Data/'
 
 class ConvNet(nn.Module):
     def __init__(self):
@@ -13,7 +13,7 @@ class ConvNet(nn.Module):
         self.layer1 = nn.Sequential(
             nn.Conv2d(3, 6, 5),
             nn.BatchNorm2d(6), # Used to improve speed, performance and stability of NN.
-            nn.ReLU()
+            nn.ReLU(),
             nn.MaxPool2d(kernel_size=2))
 
         self.layer2 = nn.Sequential(
@@ -30,7 +30,7 @@ class ConvNet(nn.Module):
 
         self.layer4 = nn.Sequential(
             nn.Conv2d(32,64, 5),
-            nn.BatchNorm2d(64)
+            nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2))
 
@@ -102,18 +102,18 @@ def visualize(results):
 
 
 
-def test_cnn(test_data):
-    model.eval() # Because there is Batch Normalization. But, Batch Normalization will be turned off during prediction
-    from sklearn.metrics import accuracy_score, precision_score, recall_score
-    # Feeding the test data into our model:
-    with torch.no_grad():
-        outputs = model(testloader)
-        predcited = torch.max(outputs.data, 1)
-        # testloader[labels] = testloader[lables].numpy()  #How to access the lables of the test data?
-        print('Accuracy:', accuracy_score((predcited, testloader[lables])))
-        print('Precision:', precision_score(predcited, testloader[labels], average='weighted'))
-        print('Recall:', recall_score(predcited, testloader[labels], average = 'weighted'))
-
+# def test_cnn(test_data):
+#     model.eval() # Because there is Batch Normalization. But, Batch Normalization will be turned off during prediction
+#     from sklearn.metrics import accuracy_score, precision_score, recall_score
+#     # Feeding the test data into our model:
+#     with torch.no_grad():
+#         outputs = model(testloader)
+#         predcited = torch.max(outputs.data, 1)
+#         # testloader[labels] = testloader[lables].numpy()  #How to access the lables of the test data?
+#         print('Accuracy:', accuracy_score((predcited, testloader[lables])))
+#         print('Precision:', precision_score(predcited, testloader[labels], average='weighted'))
+#         print('Recall:', recall_score(predcited, testloader[labels], average = 'weighted'))
+#
 
 
 if __name__ == '__main__':
@@ -122,5 +122,5 @@ if __name__ == '__main__':
     optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
     trainloader, testloader = load_split_train_test(DATA_DIR, .2)
     train_results = train_cnn(trainloader)
-    visualize_results = visualize(train_results)
-    test_results = test_cnn(testloader)
+    # visualize_results = visualize(train_results)
+    # test_results = test_cnn(testloader)
